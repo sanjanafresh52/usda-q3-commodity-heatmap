@@ -1,0 +1,210 @@
+{
+  "metadata": {
+    "source": "USDA AMS Specialty Crops Movement Reports (Socrata: agtransport.usda.gov/resource/rfpn-7etz)",
+    "years": ["2021", "2022", "2023", "2024"],
+    "n_years_avg": 4,
+    "metric": "Refrigerated truck volume, Q3 (Jul-Sep) average, in millions of pounds",
+    "fetched_at": "2026-05-12T17:00:00",
+    "note": "MOCK DATA for local preview. Actual values populate from Socrata on GitHub Actions run."
+  },
+  "commodities": [
+    "All Commodities",
+    "Potatoes",
+    "Apples",
+    "Onions, Dry",
+    "Oranges",
+    "Tomatoes",
+    "Watermelons",
+    "Grapes",
+    "Cantaloupes",
+    "Sweet Corn",
+    "Lettuce, Iceberg",
+    "Peaches",
+    "Strawberries",
+    "Carrots",
+    "Lettuce, Romaine",
+    "Celery",
+    "Broccoli",
+    "Cucumbers",
+    "Peppers, Bell Type",
+    "Tomatoes, Plum Type",
+    "Cabbage"
+  ],
+  "regions": [
+    "Arizona", "California", "Colorado", "Florida", "Great Lakes",
+    "Mexico-Arizona", "Mexico-California", "Mexico-New Mexico", "Mexico-Texas",
+    "Mid-Atlantic", "New York", "PNW", "Southeast", "Texas"
+  ],
+  "production": {
+    "All Commodities": {
+      "California":        {"jul": 1100, "aug": 1380, "sep": 1240},
+      "PNW":               {"jul":  340, "aug":  680, "sep":  920},
+      "Florida":           {"jul":   95, "aug":   72, "sep":   88},
+      "Great Lakes":       {"jul":  280, "aug":  420, "sep":  480},
+      "Mid-Atlantic":      {"jul":  140, "aug":  180, "sep":  165},
+      "Southeast":         {"jul":  220, "aug":  195, "sep":  175},
+      "Texas":             {"jul":   95, "aug":   88, "sep":  110},
+      "Arizona":           {"jul":   22, "aug":   18, "sep":   28},
+      "Colorado":          {"jul":   42, "aug":   62, "sep":   82},
+      "New York":          {"jul":   88, "aug":  140, "sep":  185},
+      "Mexico-Arizona":    {"jul":  380, "aug":  420, "sep":  440},
+      "Mexico-California": {"jul":  140, "aug":  130, "sep":  110},
+      "Mexico-New Mexico": {"jul":   18, "aug":   22, "sep":   25},
+      "Mexico-Texas":      {"jul":  580, "aug":  680, "sep":  720}
+    },
+    "Potatoes": {
+      "California":        {"jul":  42, "aug":  58, "sep":  38},
+      "PNW":               {"jul": 110, "aug": 220, "sep": 480},
+      "Great Lakes":       {"jul":  28, "aug":  82, "sep": 180},
+      "Mid-Atlantic":      {"jul":   8, "aug":  18, "sep":  28},
+      "Southeast":         {"jul":   4, "aug":   6, "sep":   4},
+      "Texas":             {"jul":   8, "aug":   4, "sep":   6},
+      "Colorado":          {"jul":  12, "aug":  28, "sep":  82},
+      "New York":          {"jul":   4, "aug":  18, "sep":  48},
+      "Mexico-Texas":      {"jul":   3, "aug":   4, "sep":   2},
+      "Florida":           {"jul":   0, "aug":   0, "sep":   0},
+      "Arizona":           {"jul":   0, "aug":   0, "sep":   0}
+    },
+    "Apples": {
+      "California":        {"jul":   8, "aug":  18, "sep":  32},
+      "PNW":               {"jul":  88, "aug": 280, "sep": 620},
+      "Great Lakes":       {"jul":  12, "aug":  48, "sep": 180},
+      "Mid-Atlantic":      {"jul":   8, "aug":  32, "sep":  95},
+      "Southeast":         {"jul":   4, "aug":  18, "sep":  62},
+      "Colorado":          {"jul":   2, "aug":   6, "sep":  18},
+      "New York":          {"jul":   8, "aug":  42, "sep": 140}
+    },
+    "Onions, Dry": {
+      "California":        {"jul": 140, "aug":  88, "sep":  62},
+      "PNW":               {"jul":  62, "aug": 180, "sep": 280},
+      "Great Lakes":       {"jul":  18, "aug":  42, "sep":  58},
+      "Colorado":          {"jul":  12, "aug":  22, "sep":  38},
+      "New York":          {"jul":   8, "aug":  28, "sep":  48},
+      "Mexico-Texas":      {"jul":  22, "aug":  18, "sep":  12},
+      "Mid-Atlantic":      {"jul":   4, "aug":   8, "sep":   8}
+    },
+    "Oranges": {
+      "California":        {"jul":  82, "aug":  62, "sep":  42},
+      "Florida":           {"jul":   2, "aug":   1, "sep":   1},
+      "Texas":             {"jul":   2, "aug":   1, "sep":   2},
+      "Arizona":           {"jul":   1, "aug":   1, "sep":   1}
+    },
+    "Tomatoes": {
+      "California":        {"jul": 420, "aug": 580, "sep": 520},
+      "PNW":               {"jul":  12, "aug":  18, "sep":  14},
+      "Great Lakes":       {"jul":  38, "aug":  62, "sep":  48},
+      "Mid-Atlantic":      {"jul":  28, "aug":  38, "sep":  22},
+      "Southeast":         {"jul":  22, "aug":  18, "sep":  14},
+      "Texas":             {"jul":   6, "aug":   4, "sep":   8},
+      "Florida":           {"jul":   2, "aug":   1, "sep":   3},
+      "Mexico-Arizona":    {"jul":  82, "aug":  95, "sep":  88},
+      "Mexico-Texas":      {"jul": 140, "aug": 180, "sep": 160},
+      "Mexico-California": {"jul":  28, "aug":  32, "sep":  28},
+      "New York":          {"jul":   8, "aug":  18, "sep":  14}
+    },
+    "Watermelons": {
+      "California":        {"jul":  82, "aug":  72, "sep":  32},
+      "Florida":           {"jul":  18, "aug":   6, "sep":   4},
+      "Mid-Atlantic":      {"jul":  12, "aug":  14, "sep":   6},
+      "Southeast":         {"jul":  82, "aug":  58, "sep":  22},
+      "Texas":             {"jul":  28, "aug":  18, "sep":   8},
+      "Mexico-Arizona":    {"jul":  62, "aug":  42, "sep":  18},
+      "Mexico-Texas":      {"jul":  82, "aug":  62, "sep":  28},
+      "Mexico-California": {"jul":  18, "aug":  14, "sep":   6},
+      "Great Lakes":       {"jul":   8, "aug":  12, "sep":   4},
+      "PNW":               {"jul":   4, "aug":   8, "sep":   2}
+    },
+    "Grapes": {
+      "California":        {"jul": 220, "aug": 580, "sep": 680},
+      "PNW":               {"jul":   8, "aug":  28, "sep":  88},
+      "Mexico-Arizona":    {"jul":  32, "aug":  18, "sep":   4},
+      "New York":          {"jul":   1, "aug":   8, "sep":  22},
+      "Great Lakes":       {"jul":   1, "aug":   8, "sep":  28}
+    },
+    "Cantaloupes": {
+      "California":        {"jul":  42, "aug":  62, "sep":  38},
+      "Arizona":           {"jul":   4, "aug":   2, "sep":   6},
+      "Mexico-California": {"jul":  18, "aug":  12, "sep":   6},
+      "Mexico-Texas":      {"jul":  12, "aug":   8, "sep":   4},
+      "Southeast":         {"jul":  18, "aug":   8, "sep":   4}
+    },
+    "Sweet Corn": {
+      "California":        {"jul":  42, "aug":  62, "sep":  38},
+      "PNW":               {"jul":  18, "aug":  32, "sep":  28},
+      "Florida":           {"jul":   4, "aug":   2, "sep":   8},
+      "Great Lakes":       {"jul":  62, "aug":  98, "sep":  78},
+      "Mid-Atlantic":      {"jul":  32, "aug":  42, "sep":  28},
+      "Southeast":         {"jul":  28, "aug":  18, "sep":  12},
+      "New York":          {"jul":  22, "aug":  32, "sep":  24}
+    },
+    "Lettuce, Iceberg": {
+      "California":        {"jul": 140, "aug": 160, "sep": 140},
+      "Arizona":           {"jul":   1, "aug":   1, "sep":   8},
+      "Colorado":          {"jul":   8, "aug":  12, "sep":  14},
+      "PNW":               {"jul":  12, "aug":  10, "sep":   8}
+    },
+    "Peaches": {
+      "California":        {"jul":  82, "aug":  62, "sep":  18},
+      "Southeast":         {"jul":  22, "aug":  14, "sep":   4},
+      "Colorado":          {"jul":   4, "aug":   8, "sep":   2},
+      "Mid-Atlantic":      {"jul":   8, "aug":   8, "sep":   2},
+      "Great Lakes":       {"jul":   2, "aug":   4, "sep":   1}
+    },
+    "Strawberries": {
+      "California":        {"jul":  62, "aug":  42, "sep":  28},
+      "Mexico-California": {"jul":  22, "aug":  28, "sep":  32},
+      "PNW":               {"jul":   4, "aug":   2, "sep":   1}
+    },
+    "Carrots": {
+      "California":        {"jul":  82, "aug":  82, "sep":  72},
+      "Mexico-Arizona":    {"jul":  12, "aug":  10, "sep":   8},
+      "Colorado":          {"jul":   4, "aug":   8, "sep":  12},
+      "PNW":               {"jul":   8, "aug":  10, "sep":  12},
+      "Great Lakes":       {"jul":   4, "aug":   8, "sep":  12}
+    },
+    "Lettuce, Romaine": {
+      "California":        {"jul":  88, "aug":  98, "sep":  88},
+      "Arizona":           {"jul":   1, "aug":   1, "sep":   4},
+      "Colorado":          {"jul":   4, "aug":   8, "sep":  10}
+    },
+    "Celery": {
+      "California":        {"jul":  78, "aug":  72, "sep":  62},
+      "Mexico-Arizona":    {"jul":   2, "aug":   1, "sep":   1}
+    },
+    "Broccoli": {
+      "California":        {"jul":  62, "aug":  68, "sep":  62},
+      "Mexico-California": {"jul":   8, "aug":  10, "sep":   8},
+      "Arizona":           {"jul":   1, "aug":   1, "sep":   4}
+    },
+    "Cucumbers": {
+      "Mexico-Texas":      {"jul":  28, "aug":  18, "sep":  12},
+      "California":        {"jul":  18, "aug":  22, "sep":  18},
+      "Florida":           {"jul":   4, "aug":   2, "sep":   8},
+      "Southeast":         {"jul":  18, "aug":  12, "sep":   8},
+      "Mid-Atlantic":      {"jul":   8, "aug":  10, "sep":   6}
+    },
+    "Peppers, Bell Type": {
+      "California":        {"jul":  42, "aug":  52, "sep":  48},
+      "Mexico-Texas":      {"jul":  28, "aug":  32, "sep":  28},
+      "Florida":           {"jul":   4, "aug":   2, "sep":   8},
+      "Great Lakes":       {"jul":   8, "aug":  12, "sep":  10}
+    },
+    "Tomatoes, Plum Type": {
+      "California":        {"jul":  82, "aug": 110, "sep":  98},
+      "Mexico-Texas":      {"jul":  38, "aug":  48, "sep":  42},
+      "Mexico-Arizona":    {"jul":  22, "aug":  28, "sep":  24}
+    },
+    "Cabbage": {
+      "California":        {"jul":  28, "aug":  22, "sep":  18},
+      "New York":          {"jul":   8, "aug":  14, "sep":  18},
+      "PNW":               {"jul":  12, "aug":  14, "sep":  10},
+      "Great Lakes":       {"jul":   8, "aug":  12, "sep":  12},
+      "Southeast":         {"jul":   4, "aug":   4, "sep":   8}
+    }
+  },
+  "known_regions": [
+    "Arizona", "California", "Colorado", "Florida", "Great Lakes",
+    "Mexico-Arizona", "Mexico-California", "Mexico-New Mexico", "Mexico-Texas",
+    "Mid-Atlantic", "New York", "PNW", "Southeast", "Texas"
+  ]
+}

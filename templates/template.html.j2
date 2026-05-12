@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Q3 Reefer Volume — USDA Heat Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --ink: #1a1410;
+    --ink-soft: #5a4a3e;
+    --ink-muted: #8a7a6e;
+    --rule: #e8ddd0;
+    --rule-strong: #c9b89e;
+    --accent: #b8431a;
+    /* heat ramp: light cream → dark burnt orange (light = low, dark = high) */
+    --heat-0: #fbecd9;
+    --heat-1: #f6d0a8;
+    --heat-2: #f0ad75;
+    --heat-3: #e88945;
+    --heat-4: #d96625;
+    --heat-5: #b8431a;
+    --heat-6: #8a2e0c;
+    --heat-7: #5c1f08;
+    --no-data: #f0eae0;
+    --mexico-fill: #d4c4a8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 32px 24px 48px; }
+
+  /* compact header */
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 14px;
+    margin-bottom: 20px;
+  }
+  .head h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .head .meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+  }
+
+  /* controls */
+  .controls {
+    display: grid;
+    grid-template-columns: 1fr 240px;
+    gap: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .ctrl-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 8px;
+    display: block;
+  }
+  .pill-row { display: flex; flex-wrap: wrap; gap: 5px; }
+  .pill {
+    border: 1px solid var(--rule-strong);
+    background: transparent;
+    color: var(--ink-soft);
+    padding: 5px 11px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11.5px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 999px;
+    transition: all 140ms ease;
+    white-space: nowrap;
+  }
+  .pill:hover { border-color: var(--accent); color: var(--accent); }
+  .pill.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+  /* map */
+  .map-container {
+    position: relative;
+    width: 100%;
+  }
+  .us-map { width: 100%; height: auto; display: block; }
+  .us-map path.state {
+    stroke: #ffffff;
+    stroke-width: 0.8;
+    cursor: pointer;
+    transition: stroke-width 120ms;
+  }
+  .us-map path.state:hover {
+    stroke: var(--ink);
+    stroke-width: 1.5;
+  }
+  .us-map .nation {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 0.8;
+    pointer-events: none;
+  }
+  .us-map .region-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 0.12em;
+    fill: var(--ink);
+    text-transform: uppercase;
+    font-weight: 500;
+    pointer-events: none;
+    paint-order: stroke;
+    stroke: rgba(255,255,255,0.85);
+    stroke-width: 2.5;
+  }
+  .us-map .mexico-box {
+    fill: var(--mexico-fill);
+    stroke: var(--ink-soft);
+    stroke-width: 0.6;
+    stroke-dasharray: 3,2;
+    cursor: pointer;
+  }
+  .us-map .mexico-box:hover { fill: var(--heat-2); }
+  .us-map .mexico-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    fill: var(--ink);
+    pointer-events: none;
+    font-weight: 500;
+  }
+  .us-map .mexico-section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    fill: var(--ink-muted);
+    pointer-events: none;
+  }
+
+  /* tooltip */
+  .tooltip {
+    position: absolute;
+    background: var(--ink);
+    color: var(--bg);
+    padding: 8px 12px;
+    border-radius: 3px;
+    font-size: 12px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 100ms;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    line-height: 1.4;
+    white-space: nowrap;
+    transform: translate(-50%, -100%);
+  }
+  .tooltip strong {
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .tooltip .tt-detail {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #f0ad75;
+  }
+
+  /* legend */
+  .legend {
+    margin-top: 12px;
+    padding-top: 14px;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: center;
+  }
+  .legend-bar-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .legend-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .legend-bar {
+    display: flex;
+    height: 12px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .legend-bar > div { flex: 1; }
+  .legend-ends {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-muted);
+  }
+  .legend-current {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-soft);
+    text-align: right;
+  }
+  .legend-current strong {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .source {
+    margin-top: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-muted);
+    text-align: right;
+  }
+
+  @media print {
+    .controls { display: none; }
+    body { background: white; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="head">
+    <h1>Q3 Reefer Volume by Region — <span id="commodityName"></span></h1>
+    <div class="meta">{{ year_range }} 4-yr avg · {{ build_date }}</div>
+  </div>
+
+  <div class="controls">
+    <div>
+      <label class="ctrl-label">Commodity</label>
+      <div class="pill-row" id="commodityPills"></div>
+    </div>
+    <div>
+      <label class="ctrl-label">Q3 Month</label>
+      <div class="pill-row" id="monthPills">
+        <button class="pill active" data-month="all">Full Q3</button>
+        <button class="pill" data-month="jul">Jul</button>
+        <button class="pill" data-month="aug">Aug</button>
+        <button class="pill" data-month="sep">Sep</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="map-container">
+    <svg class="us-map" viewBox="0 0 975 730" preserveAspectRatio="xMidYMid meet">
+      <g id="statesG"></g>
+      <path class="nation" id="nationPath"></path>
+      <g id="labelsG"></g>
+      <g id="mexicoG"></g>
+    </svg>
+    <div class="tooltip" id="tooltip"></div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-bar-wrap">
+      <div class="legend-label">Volume — Low → High</div>
+      <div class="legend-bar" id="legendBar"></div>
+      <div class="legend-ends" id="legendEnds"></div>
+    </div>
+    <div class="legend-current" id="legendCurrent"></div>
+  </div>
+
+  <div class="source">Source: USDA AMS Specialty Crops Movement Reports · agtransport.usda.gov/rfpn-7etz</div>
+</div>
+
+<script>
+  // ═══════════════════════════════════════════════════════════════
+  // INJECTED DATA
+  // ═══════════════════════════════════════════════════════════════
+  const PRODUCTION = {{ production_json | safe }};      // {commodity: {region: {jul,aug,sep}}}
+  const COMMODITIES = {{ commodities_json | safe }};    // ordered list
+  const REGIONS = {{ regions_json | safe }};            // all regions observed (incl Mexico)
+
+  // ═══════════════════════════════════════════════════════════════
+  // STATE → REGION mapping (USDA AMS shipping districts)
+  // ═══════════════════════════════════════════════════════════════
+  const STATE_TO_REGION = {
+    // Single-state regions
+    "Arizona":     "Arizona",
+    "California":  "California",
+    "Colorado":    "Colorado",
+    "Florida":     "Florida",
+    "New York":    "New York",
+    "Texas":       "Texas",
+    // Great Lakes (per AMS AgRTQ: MI, MN, WI; we extend to OH/IN/IL like Movement Reports do)
+    "Michigan":    "Great Lakes",
+    "Minnesota":   "Great Lakes",
+    "Wisconsin":   "Great Lakes",
+    "Ohio":        "Great Lakes",
+    "Indiana":     "Great Lakes",
+    "Illinois":    "Great Lakes",
+    // Mid-Atlantic
+    "Pennsylvania":   "Mid-Atlantic",
+    "New Jersey":     "Mid-Atlantic",
+    "Delaware":       "Mid-Atlantic",
+    "Maryland":       "Mid-Atlantic",
+    "Virginia":       "Mid-Atlantic",
+    "West Virginia":  "Mid-Atlantic",
+    // PNW (per AMS AgRTQ: ID, OR, WA)
+    "Washington":  "PNW",
+    "Oregon":      "PNW",
+    "Idaho":       "PNW",
+    // Southeast (per AMS AgRTQ: NC, SC, GA — Movement Reports also include AL/TN/KY)
+    "North Carolina":  "Southeast",
+    "South Carolina":  "Southeast",
+    "Georgia":         "Southeast",
+    "Alabama":         "Southeast",
+    "Tennessee":       "Southeast",
+    "Kentucky":        "Southeast",
+  };
+
+  // Region centroids for on-map labels (Albers projected, 975×610 viewport).
+  const REGION_LABELS = [
+    { region: "PNW",          x: 185, y: 130, text: "PNW" },
+    { region: "California",   x: 110, y: 270, text: "CALIF" },
+    { region: "Arizona",      x: 220, y: 360, text: "ARIZ" },
+    { region: "Colorado",     x: 340, y: 290, text: "COLO" },
+    { region: "Texas",        x: 460, y: 450, text: "TEXAS" },
+    { region: "Great Lakes",  x: 605, y: 200, text: "GREAT LAKES" },
+    { region: "New York",     x: 800, y: 195, text: "NY" },
+    { region: "Mid-Atlantic", x: 790, y: 265, text: "MID-ATL" },
+    { region: "Southeast",    x: 700, y: 380, text: "SE" },
+    { region: "Florida",      x: 765, y: 510, text: "FLA" },
+  ];
+
+  // Mexico crossing boxes — positioned below the US map (Mexico territory area)
+  const MEXICO_CROSSINGS = [
+    { region: "Mexico-California", x: 85,  label: "MX-CA" },
+    { region: "Mexico-Arizona",    x: 205, label: "MX-AZ" },
+    { region: "Mexico-New Mexico", x: 325, label: "MX-NM" },
+    { region: "Mexico-Texas",      x: 445, label: "MX-TX" },
+  ];
+
+  // ═══════════════════════════════════════════════════════════════
+  // STATE
+  // ═══════════════════════════════════════════════════════════════
+  let currentCommodity = COMMODITIES[0] || "All Commodities";
+  let currentMonth = "all";
+  let topology = null;
+  let statePaths = null;
+  let nationPath = null;
+
+  // ═══════════════════════════════════════════════════════════════
+  // HELPERS
+  // ═══════════════════════════════════════════════════════════════
+  function fmt(n) {
+    if (n == null || isNaN(n)) return "—";
+    if (n >= 1000) return (n/1000).toFixed(2) + "B lbs";
+    if (n >= 1)    return n.toFixed(0) + "M lbs";
+    if (n > 0)     return n.toFixed(1) + "M lbs";
+    return "0";
+  }
+  function getRegionValue(region, commodity, month) {
+    const d = PRODUCTION[commodity]?.[region];
+    if (!d) return 0;
+    if (month === "all") return (d.jul||0) + (d.aug||0) + (d.sep||0);
+    return d[month] || 0;
+  }
+  function heatColor(value, maxValue) {
+    if (value <= 0 || maxValue <= 0) return "var(--no-data)";
+    const t = value / maxValue;
+    if (t > 0.85) return "var(--heat-7)";
+    if (t > 0.65) return "var(--heat-6)";
+    if (t > 0.45) return "var(--heat-5)";
+    if (t > 0.30) return "var(--heat-4)";
+    if (t > 0.18) return "var(--heat-3)";
+    if (t > 0.08) return "var(--heat-2)";
+    if (t > 0.02) return "var(--heat-1)";
+    return "var(--heat-0)";
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  // RENDER · CONTROLS
+  // ═══════════════════════════════════════════════════════════════
+  function renderCommodityPills() {
+    const el = document.getElementById("commodityPills");
+    el.innerHTML = COMMODITIES.map(c =>
+      `<button class="pill ${c===currentCommodity?'active':''}" data-c="${c}">${c}</button>`
+    ).join("");
+    el.querySelectorAll(".pill").forEach(b => {
+      b.addEventListener("click", () => {
+        currentCommodity = b.dataset.c;
+        renderCommodityPills();
+        renderAll();
+      });
+    });
+  }
+  function bindMonthPills() {
+    document.querySelectorAll("#monthPills .pill").forEach(b => {
+      b.addEventListener("click", () => {
+        document.querySelectorAll("#monthPills .pill").forEach(p => p.classList.remove("active"));
+        b.classList.add("active");
+        currentMonth = b.dataset.month;
+        renderAll();
+      });
+    });
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  // RENDER · MAP (D3 + TopoJSON)
+  // ═══════════════════════════════════════════════════════════════
+  async function loadTopology() {
+    const res = await fetch("https://cdn.jsdelivr.net/npm/us-atlas@3/states-albers-10m.json");
+    topology = await res.json();
+    statePaths = topojson.feature(topology, topology.objects.states).features;
+    nationPath = topojson.feature(topology, topology.objects.nation);
+    const path = d3.geoPath();
+    document.getElementById("nationPath").setAttribute("d", path(nationPath));
+  }
+
+  function renderMap() {
+    const path = d3.geoPath();
+    const statesG = d3.select("#statesG");
+
+    // compute region values & max for color scaling
+    const regionValues = {};
+    let maxVal = 0;
+    REGIONS.forEach(r => {
+      const v = getRegionValue(r, currentCommodity, currentMonth);
+      regionValues[r] = v;
+      if (v > maxVal) maxVal = v;
+    });
+
+    const tooltip = document.getElementById("tooltip");
+    const mapEl = document.querySelector(".map-container");
+
+    // bind states
+    const states = statesG.selectAll("path.state")
+      .data(statePaths, d => d.id);
+
+    states.enter()
+      .append("path")
+      .attr("class", "state")
+      .attr("d", path)
+      .merge(states)
+      .attr("fill", d => {
+        const region = STATE_TO_REGION[d.properties.name];
+        if (!region) return "var(--no-data)";
+        return heatColor(regionValues[region] || 0, maxVal);
+      })
+      .on("mouseenter", function(event, d) {
+        const region = STATE_TO_REGION[d.properties.name];
+        const v = region ? (regionValues[region] || 0) : 0;
+        if (region) {
+          tooltip.innerHTML = `<strong>${d.properties.name}</strong>
+            <div class="tt-detail">${region} · ${fmt(v)}</div>`;
+        } else {
+          tooltip.innerHTML = `<strong>${d.properties.name}</strong>
+            <div class="tt-detail">Not in AMS shipping districts</div>`;
+        }
+        tooltip.style.opacity = "1";
+      })
+      .on("mousemove", function(event) {
+        const rect = mapEl.getBoundingClientRect();
+        tooltip.style.left = (event.clientX - rect.left) + "px";
+        tooltip.style.top  = (event.clientY - rect.top - 12) + "px";
+      })
+      .on("mouseleave", () => { tooltip.style.opacity = "0"; });
+
+    states.exit().remove();
+
+    // region labels
+    const labelsG = d3.select("#labelsG");
+    labelsG.selectAll("*").remove();
+    REGION_LABELS.forEach(l => {
+      labelsG.append("text")
+        .attr("class", "region-label")
+        .attr("x", l.x).attr("y", l.y)
+        .attr("text-anchor", "middle")
+        .text(l.text);
+    });
+
+    // Mexico crossing boxes (below the US, in the "Mexico" area)
+    const mexicoG = d3.select("#mexicoG");
+    mexicoG.selectAll("*").remove();
+    const mexY = 640;
+    // Section header
+    mexicoG.append("text")
+      .attr("class", "mexico-section-label")
+      .attr("x", 85).attr("y", mexY - 6)
+      .text("MEXICO · IMPORT CROSSINGS");
+
+    MEXICO_CROSSINGS.forEach(m => {
+      const v = regionValues[m.region] || 0;
+      const fill = v > 0 ? heatColor(v, maxVal) : "var(--mexico-fill)";
+      mexicoG.append("rect")
+        .attr("class", "mexico-box")
+        .attr("x", m.x).attr("y", mexY).attr("width", 110).attr("height", 32)
+        .attr("fill", fill)
+        .on("mouseenter", function(event) {
+          tooltip.innerHTML = `<strong>${m.region}</strong>
+            <div class="tt-detail">${fmt(v)}</div>`;
+          tooltip.style.opacity = "1";
+        })
+        .on("mousemove", function(event) {
+          const rect = mapEl.getBoundingClientRect();
+          tooltip.style.left = (event.clientX - rect.left) + "px";
+          tooltip.style.top  = (event.clientY - rect.top - 12) + "px";
+        })
+        .on("mouseleave", () => { tooltip.style.opacity = "0"; });
+
+      mexicoG.append("text")
+        .attr("class", "mexico-label")
+        .attr("x", m.x + 55).attr("y", mexY + 13)
+        .attr("text-anchor", "middle")
+        .text(m.label);
+      mexicoG.append("text")
+        .attr("class", "mexico-label")
+        .attr("x", m.x + 55).attr("y", mexY + 26)
+        .attr("text-anchor", "middle")
+        .text(fmt(v));
+    });
+
+    return { regionValues, maxVal };
+  }
+
+  function renderLegend(regionValues, maxVal) {
+    const stops = ["--heat-0","--heat-1","--heat-2","--heat-3","--heat-4","--heat-5","--heat-6","--heat-7"];
+    document.getElementById("legendBar").innerHTML = stops
+      .map(s => `<div style="background:var(${s})"></div>`).join("");
+    document.getElementById("legendEnds").innerHTML = `<span>0</span><span>${fmt(maxVal)}</span>`;
+
+    // top region callout
+    let top = { region: "—", v: 0 };
+    Object.entries(regionValues).forEach(([r, v]) => { if (v > top.v) top = { region: r, v }; });
+    const monthLabel = currentMonth === "all" ? "Q3" : currentMonth.toUpperCase();
+    document.getElementById("legendCurrent").innerHTML =
+      `LEADING REGION · ${monthLabel}<strong>${top.region} — ${fmt(top.v)}</strong>`;
+  }
+
+  function renderAll() {
+    document.getElementById("commodityName").textContent = currentCommodity;
+    const { regionValues, maxVal } = renderMap();
+    renderLegend(regionValues, maxVal);
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  // INIT
+  // ═══════════════════════════════════════════════════════════════
+  (async function init() {
+    renderCommodityPills();
+    bindMonthPills();
+    try {
+      await loadTopology();
+      renderAll();
+    } catch (e) {
+      console.error("Failed to load US map:", e);
+      document.querySelector(".map-container").innerHTML =
+        `<div style="padding:40px;text-align:center;color:#8a7a6e">
+          Could not load US map data from CDN. Check internet connection.
+        </div>`;
+    }
+  })();
+</script>
+</body>
+</html>
