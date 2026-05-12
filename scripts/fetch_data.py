@@ -14,6 +14,7 @@ from __future__ import annotations
 import json
 import os
 import sys
+import time
 from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
@@ -41,6 +42,29 @@ def get_app_token() -> str | None:
     return os.environ.get("SOCRATA_APP_TOKEN") or None
 
 
+def _get_with_retry(
+    url: str,
+    *,
+    params: dict[str, Any],
+    headers: dict[str, str],
+    timeout: int,
+    max_retries: int = 3,
+) -> requests.Response:
+    retryable = (requests.exceptions.Timeout, requests.exceptions.ConnectionError)
+    for attempt in range(max_retries + 1):
+        try:
+            return requests.get(url, params=params, headers=headers, timeout=timeout)
+        except retryable as e:
+            if attempt == max_retries:
+                raise
+            backoff = 2 ** attempt
+            print(f"\n    {type(e).__name__} on attempt {attempt + 1}/{max_retries + 1}; "
+                  f"retrying in {backoff}s …", flush=True)
+            time.sleep(backoff)
+            print(f"  → page offset={params.get('$offset', 0):>7} (retry) ", end="", flush=True)
+    raise RuntimeError("unreachable")
+
+
 def fetch_all(start_year: int, end_year: int) -> list[dict[str, Any]]:
     headers: dict[str, str] = {}
     token = get_app_token()
@@ -64,7 +88,7 @@ def fetch_all(start_year: int, end_year: int) -> list[dict[str, Any]]:
             )
 
         print(f"  → page offset={offset:>7} ", end="", flush=True)
-        r = requests.get(API_URL, params=params, headers=headers, timeout=120)
+        r = _get_with_retry(API_URL, params=params, headers=headers, timeout=300)
         if r.status_code != 200:
             print(f"HTTP {r.status_code}: {r.text[:200]}")
             sys.exit(1)
