@@ -152,8 +152,8 @@ def aggregate(records: list[dict[str, Any]]) -> dict[str, Any]:
     date_field = next((f for f in ("week_ending", "report_date", "date", "ship_date") if f in sample), None)
     region_field = next((f for f in ("region", "origin_region", "shipping_region") if f in sample), None)
     commodity_field = next((f for f in ("commodity", "commodity_name", "item") if f in sample), None)
-    volume_field = next((f for f in ("volume", "shipment_volume", "total_volume", "volume_tons",
-                                     "pounds", "volume_pounds") if f in sample), None)
+    volume_field = next((f for f in ("tenkunits", "volume", "shipment_volume", "total_volume",
+                                     "volume_tons", "pounds", "volume_pounds") if f in sample), None)
 
     print(f"  fields → date={date_field}, region={region_field}, commodity={commodity_field}, volume={volume_field}")
 
@@ -180,8 +180,11 @@ def aggregate(records: list[dict[str, Any]]) -> dict[str, Any]:
             vol = float(rec.get(volume_field, ""))
         except (TypeError, ValueError):
             continue
-        # Unit normalization: AMS reefer volumes are typically tons → convert to lbs
-        if "pound" not in volume_field.lower() and "lbs" not in volume_field.lower():
+        # AMS dashboard label: "Reefer Volume in 10,000s of lbs" — tenkunits is
+        # already lbs once scaled by 10k, so no tons→lbs conversion is needed.
+        if volume_field == "tenkunits":
+            vol *= 10_000.0
+        elif "pound" not in volume_field.lower() and "lbs" not in volume_field.lower():
             vol *= 2000.0
         acc[commodity][region][d.year][d.month] += vol
         kept += 1
