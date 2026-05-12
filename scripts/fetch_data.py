@@ -15,7 +15,7 @@ import json
 import os
 import sys
 import time
-from collections import defaultdict
+from collections import Counter, defaultdict
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -135,6 +135,53 @@ def fetch_all(start_year: int, end_year: int) -> list[dict[str, Any]]:
     return rows
 
 
+_GREAT_LAKES = {"GREAT LAKES", "MICHIGAN", "WISCONSIN", "MINNESOTA", "OHIO", "INDIANA", "ILLINOIS"}
+_MID_ATLANTIC = {"MID-ATLANTIC", "PENNSYLVANIA", "NEW JERSEY", "DELAWARE", "MARYLAND",
+                 "VIRGINIA", "WEST VIRGINIA"}
+_SOUTHEAST = {"SOUTHEAST", "NORTH CAROLINA", "SOUTH CAROLINA", "GEORGIA", "ALABAMA",
+              "TENNESSEE", "KENTUCKY"}
+_PNW = {"PNW", "PACIFIC NORTHWEST", "WASHINGTON", "OREGON", "IDAHO"}
+
+
+def normalize_region(raw: str) -> str | None:
+    """Map AMS region labels (e.g. 'MEXICO-TEXAS', 'CALIFORNIA-SALINAS-WATSONVILLE')
+    to the canonical names used by the dashboard. Returns None for rows that
+    don't belong on the U.S. heatmap (Canada, Other, etc.)."""
+    u = raw.strip().upper()
+    if not u:
+        return None
+    # Mexico-* prefix matches must come before the plain CALIFORNIA prefix.
+    if u.startswith("MEXICO-CALIFORNIA"):
+        return "Mexico-California"
+    if u.startswith("MEXICO-ARIZONA"):
+        return "Mexico-Arizona"
+    if u.startswith("MEXICO-TEXAS"):
+        return "Mexico-Texas"
+    if u.startswith("MEXICO-NEW MEXICO") or u.startswith("MEXICO-NM"):
+        return "Mexico-New Mexico"
+    if u.startswith("CALIFORNIA"):
+        return "California"
+    if u in _PNW:
+        return "PNW"
+    if u == "ARIZONA":
+        return "Arizona"
+    if u == "COLORADO":
+        return "Colorado"
+    if u == "FLORIDA":
+        return "Florida"
+    if u == "NEW YORK":
+        return "New York"
+    if u == "TEXAS":
+        return "Texas"
+    if u in _GREAT_LAKES:
+        return "Great Lakes"
+    if u in _MID_ATLANTIC:
+        return "Mid-Atlantic"
+    if u in _SOUTHEAST:
+        return "Southeast"
+    return None
+
+
 def parse_date(s: str) -> datetime | None:
     if not s:
         return None
@@ -163,6 +210,16 @@ def aggregate(records: list[dict[str, Any]]) -> dict[str, Any]:
             print(f"    - {k}")
         sys.exit(1)
 
+    # Debug: show what raw region labels the dataset actually uses so we can
+    # refine normalize_region() if anything is being dropped unexpectedly.
+    region_counts = Counter(
+        (rec.get(region_field) or "").strip() for rec in records
+        if (rec.get(region_field) or "").strip()
+    )
+    print(f"  top 30 raw region labels (of {len(region_counts)} unique):")
+    for label, n in region_counts.most_common(30):
+        print(f"    {n:>7,}  {label}  → {normalize_region(label)}")
+
     acc: dict[str, dict[str, dict[int, dict[int, float]]]] = defaultdict(
         lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(float)))
     )
@@ -172,7 +229,7 @@ def aggregate(records: list[dict[str, Any]]) -> dict[str, Any]:
         d = parse_date(rec.get(date_field, ""))
         if d is None or d.month not in Q3_MONTHS:
             continue
-        region = (rec.get(region_field) or "").strip()
+        region = normalize_region(rec.get(region_field) or "")
         commodity = (rec.get(commodity_field) or "").strip()
         if not region or not commodity:
             continue
