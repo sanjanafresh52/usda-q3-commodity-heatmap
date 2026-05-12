@@ -28,7 +28,7 @@ API_URL = f"https://{SOCRATA_DOMAIN}/resource/{DATASET_ID}.json"
 
 N_YEARS = 4
 Q3_MONTHS = (7, 8, 9)
-PAGE_SIZE = 25_000
+PAGE_SIZE = 10_000
 
 # USDA AMS shipping regions — matches the image / AgRTQ canonical list.
 KNOWN_REGIONS: list[str] = [
@@ -48,16 +48,20 @@ def _get_with_retry(
     params: dict[str, Any],
     headers: dict[str, str],
     timeout: int,
-    max_retries: int = 3,
+    max_retries: int = 5,
 ) -> requests.Response:
-    retryable = (requests.exceptions.Timeout, requests.exceptions.ConnectionError)
+    retryable = (
+        requests.exceptions.Timeout,
+        requests.exceptions.ConnectionError,
+        requests.exceptions.ChunkedEncodingError,
+    )
     for attempt in range(max_retries + 1):
         try:
             return requests.get(url, params=params, headers=headers, timeout=timeout)
         except retryable as e:
             if attempt == max_retries:
                 raise
-            backoff = 2 ** attempt
+            backoff = 2 ** (attempt + 1)  # 2, 4, 8, 16, 32 s
             print(f"\n    {type(e).__name__} on attempt {attempt + 1}/{max_retries + 1}; "
                   f"retrying in {backoff}s …", flush=True)
             time.sleep(backoff)
@@ -82,13 +86,13 @@ def fetch_all(start_year: int, end_year: int) -> list[dict[str, Any]]:
             "$order": ":id",
         }
         if detected_date_field:
-            # Server-side filter: Q3 months only (Jul/Aug/Sep) within the target
-            # year window. date_extract_m() lets Socrata prune ~75% of rows before
-            # they ever hit the wire, which is what makes the full pull tractable.
+            # Server-side filter: only Q3 months (Jul/Aug/Sep) within the target
+            # year window. Pushing both predicates into $where lets Socrata drop
+            # ~75% of rows before they hit the wire, which is what makes the full
+            # pull tractable against a flaky endpoint.
             params["$where"] = (
-                f"{detected_date_field} >= '{start_year}-01-01T00:00:00.000' AND "
-                f"{detected_date_field} < '{end_year + 1}-01-01T00:00:00.000' AND "
-                f"date_extract_m({detected_date_field}) IN (7, 8, 9)"
+                f"date_extract_m({detected_date_field}) IN (7, 8, 9) AND "
+                f"date_extract_y({detected_date_field}) BETWEEN {start_year} AND {end_year}"
             )
 
         print(f"  → page offset={offset:>7} ", end="", flush=True)
