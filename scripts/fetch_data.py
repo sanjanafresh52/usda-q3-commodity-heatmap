@@ -28,7 +28,7 @@ API_URL = f"https://{SOCRATA_DOMAIN}/resource/{DATASET_ID}.json"
 
 N_YEARS = 4
 Q3_MONTHS = (7, 8, 9)
-PAGE_SIZE = 50_000
+PAGE_SIZE = 25_000
 
 # USDA AMS shipping regions — matches the image / AgRTQ canonical list.
 KNOWN_REGIONS: list[str] = [
@@ -82,9 +82,13 @@ def fetch_all(start_year: int, end_year: int) -> list[dict[str, Any]]:
             "$order": ":id",
         }
         if detected_date_field:
+            # Server-side filter: Q3 months only (Jul/Aug/Sep) within the target
+            # year window. date_extract_m() lets Socrata prune ~75% of rows before
+            # they ever hit the wire, which is what makes the full pull tractable.
             params["$where"] = (
                 f"{detected_date_field} >= '{start_year}-01-01T00:00:00.000' AND "
-                f"{detected_date_field} < '{end_year + 1}-01-01T00:00:00.000'"
+                f"{detected_date_field} < '{end_year + 1}-01-01T00:00:00.000' AND "
+                f"date_extract_m({detected_date_field}) IN (7, 8, 9)"
             )
 
         print(f"  → page offset={offset:>7} ", end="", flush=True)
