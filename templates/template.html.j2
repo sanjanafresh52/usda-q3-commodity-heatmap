@@ -44,10 +44,23 @@
   .head {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
     border-bottom: 1px solid var(--rule);
     padding-bottom: 14px;
     margin-bottom: 20px;
+    gap: 16px;
+  }
+  .head .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+  }
+  .head .logo {
+    height: 36px;
+    width: auto;
+    display: block;
+    flex-shrink: 0;
   }
   .head h1 {
     font-family: 'Inter', sans-serif;
@@ -250,7 +263,10 @@
 <div class="wrap">
 
   <div class="head">
-    <h1>Q3 Reefer Volume by Region — <span id="commodityName"></span></h1>
+    <div class="brand">
+      <img class="logo" src="https://widsix.com/wp-content/uploads/2022/03/LOGO_fresh-freight-.jpg" alt="Fresh Freight" />
+      <h1>Q3 Reefer Volume by Region — <span id="commodityName"></span></h1>
+    </div>
     <div class="meta">{{ year_range }} 4-yr avg · {{ build_date }}</div>
   </div>
 
