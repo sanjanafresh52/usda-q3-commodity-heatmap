@@ -229,10 +229,15 @@
   .us-map path.state {
     stroke: #ffffff;
     stroke-width: 0.8;
+    stroke-linejoin: round;
+    stroke-linecap: round;
     cursor: pointer;
-    transition: stroke-width 120ms;
+    transition: stroke-width 120ms, stroke 120ms;
   }
-  .us-map path.state:hover { stroke: var(--ink); stroke-width: 1.4; }
+  .us-map path.state:hover {
+    stroke: #1a1a1a;
+    stroke-width: 2;
+  }
   .us-map .nation {
     fill: none;
     stroke: var(--ink);
@@ -241,9 +246,8 @@
   }
   .us-map .mexico-shape {
     fill: var(--mexico-fill);
-    stroke: var(--ink-muted);
+    stroke: #9a9a9a;
     stroke-width: 1;
-    stroke-dasharray: 5,3;
   }
   .us-map .mexico-label {
     font-family: 'Montserrat', sans-serif;
@@ -372,17 +376,29 @@
     text-anchor: middle;
   }
 
-  /* legend */
-  .legend {
-    margin-top: 14px;
-    padding-top: 14px;
-    border-top: 1px solid var(--rule);
+  /* viz layout: map/chart on left, vertical legend on right */
+  .viz-layout {
     display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 16px;
-    align-items: center;
+    grid-template-columns: minmax(0, 4fr) minmax(150px, 1fr);
+    gap: 24px;
+    align-items: stretch;
   }
-  .legend-bar-wrap { display: flex; flex-direction: column; gap: 4px; }
+  @media (max-width: 720px) {
+    .viz-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* vertical legend */
+  .legend-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 14px 12px;
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+  }
   .legend-label {
     font-family: 'Montserrat', sans-serif;
     font-size: 10px;
@@ -391,16 +407,25 @@
     text-transform: uppercase;
     color: var(--ink-muted);
   }
-  .legend-bar {
+  .legend-vertical-mid {
     display: flex;
-    height: 12px;
+    gap: 10px;
+    align-items: stretch;
+    flex: 1;
+    min-height: 240px;
+  }
+  .legend-bar-vert {
+    display: flex;
+    flex-direction: column;
+    width: 14px;
     border-radius: 4px;
     overflow: hidden;
     border: 1px solid var(--rule);
   }
-  .legend-bar > div { flex: 1; }
-  .legend-ends {
+  .legend-bar-vert > div { flex: 1; }
+  .legend-ends-vert {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     font-family: 'Open Sans', sans-serif;
     font-size: 11px;
@@ -413,20 +438,22 @@
     font-size: 10px;
     font-weight: 600;
     color: var(--ink-soft);
-    text-align: right;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+    border-top: 1px solid var(--rule);
+    padding-top: 12px;
   }
   .legend-current strong {
     display: block;
     font-family: 'Montserrat', sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
     color: var(--ink);
     text-transform: none;
     letter-spacing: 0;
     font-variant-numeric: tabular-nums;
-    margin-top: 2px;
+    margin-top: 4px;
+    line-height: 1.3;
   }
 
   .source {
@@ -476,31 +503,36 @@
     </div>
   </div>
 
-  <div class="viz-area">
-    <div class="viz-pane" id="mapPane">
-      <div class="map-container">
-        <svg class="us-map" viewBox="0 0 975 970" preserveAspectRatio="xMidYMid meet">
-          <g id="mexicoShapeG"></g>
-          <g id="statesG"></g>
-          <path class="nation" id="nationPath"></path>
-          <g id="labelsG"></g>
-          <g id="crossingsG"></g>
-        </svg>
-        <div class="tooltip" id="tooltip"></div>
+  <div class="viz-layout">
+    <div class="viz-area">
+      <div class="viz-pane" id="mapPane">
+        <div class="map-container">
+          <svg class="us-map" viewBox="0 0 975 970" preserveAspectRatio="xMidYMid meet">
+            <g id="mexicoShapeG"></g>
+            <g id="statesG"></g>
+            <path class="nation" id="nationPath"></path>
+            <g id="labelsG"></g>
+            <g id="crossingsG"></g>
+          </svg>
+          <div class="tooltip" id="tooltip"></div>
+        </div>
+      </div>
+      <div class="viz-pane hidden" id="chartPane" aria-hidden="true">
+        <svg class="chart-svg" id="chartSvg" viewBox="0 0 960 560" preserveAspectRatio="xMidYMid meet"></svg>
       </div>
     </div>
-    <div class="viz-pane hidden" id="chartPane" aria-hidden="true">
-      <svg class="chart-svg" id="chartSvg" viewBox="0 0 960 560" preserveAspectRatio="xMidYMid meet"></svg>
-    </div>
-  </div>
 
-  <div class="legend">
-    <div class="legend-bar-wrap">
-      <div class="legend-label">Volume — Low → High</div>
-      <div class="legend-bar" id="legendBar"></div>
-      <div class="legend-ends" id="legendEnds"></div>
+    <div class="legend-vertical">
+      <div class="legend-label">Volume</div>
+      <div class="legend-vertical-mid">
+        <div class="legend-bar-vert" id="legendBar"></div>
+        <div class="legend-ends-vert">
+          <span id="legendHigh">High</span>
+          <span id="legendLow">Low</span>
+        </div>
+      </div>
+      <div class="legend-current" id="legendCurrent"></div>
     </div>
-    <div class="legend-current" id="legendCurrent"></div>
   </div>
 
   <div class="source">Source: USDA AMS Specialty Crops Movement Reports · agtransport.usda.gov/rfpn-7etz</div>
@@ -568,10 +600,10 @@
   // (computed via d3.geoAlbers().scale(1300).translate([487.5, 305]) so they sit on the border).
   // Card x/y = label-card center, placed inside the real projected Mexico territory.
   const MEXICO_CROSSINGS = [
-    { region: "Mexico-California", name: "Otay Mesa",       marker: { x: 101, y: 402 }, card: { x: 130, y: 500 } },
-    { region: "Mexico-Arizona",    name: "Nogales",         marker: { x: 211, y: 451 }, card: { x: 220, y: 560 } },
-    { region: "Mexico-New Mexico", name: "Santa Teresa",    marker: { x: 285, y: 450 }, card: { x: 320, y: 600 } },
-    { region: "Mexico-Texas",      name: "Laredo / Pharr",  marker: { x: 440, y: 574 }, card: { x: 470, y: 700 } },
+    { region: "Mexico-California", name: "Otay Mesa",       marker: { x: 101, y: 402 }, card: { x:  88, y: 451 } },
+    { region: "Mexico-Arizona",    name: "Nogales",         marker: { x: 211, y: 451 }, card: { x: 188, y: 506 } },
+    { region: "Mexico-New Mexico", name: "Santa Teresa",    marker: { x: 285, y: 450 }, card: { x: 275, y: 525 } },
+    { region: "Mexico-Texas",      name: "Laredo / Pharr",  marker: { x: 440, y: 574 }, card: { x: 428, y: 637 } },
   ];
 
   // ═══════════════════════════════════════════════════════════════
@@ -838,6 +870,7 @@
         return heatColor(regionValues[region] || 0, maxVal);
       })
       .on("mouseenter", function(event, d) {
+        d3.select(this).raise();
         const region = STATE_TO_REGION[d.properties.name];
         const v = region ? (regionValues[region] || 0) : 0;
         if (region) {
@@ -969,10 +1002,12 @@
   // LEGEND
   // ═══════════════════════════════════════════════════════════════
   function renderLegend(regionValues, maxVal) {
-    const stops = ["--heat-0","--heat-1","--heat-2","--heat-3","--heat-4","--heat-5","--heat-6","--heat-7"];
+    // High at top → render heat-7 first, then descending to heat-0 at bottom.
+    const stops = ["--heat-7","--heat-6","--heat-5","--heat-4","--heat-3","--heat-2","--heat-1","--heat-0"];
     document.getElementById("legendBar").innerHTML = stops
       .map(s => `<div style="background:var(${s})"></div>`).join("");
-    document.getElementById("legendEnds").innerHTML = `<span>0</span><span>${fmt(maxVal)}</span>`;
+    document.getElementById("legendHigh").textContent = fmt(maxVal);
+    document.getElementById("legendLow").textContent = "0";
 
     let top = { region: "—", v: 0 };
     Object.entries(regionValues).forEach(([r, v]) => { if (v > top.v) top = { region: r, v }; });
