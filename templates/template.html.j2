@@ -564,13 +564,14 @@
     { region: "Florida",      x: 800, y: 510, text: "FLA" },
   ];
 
-  // US-MX border crossings. Marker x/y = approximate Albers location on the southern border.
+  // US-MX border crossings. Marker x/y = exact Albers projection of the crossing town
+  // (computed via d3.geoAlbers().scale(1300).translate([487.5, 305]) so they sit on the border).
   // Card x/y = label-card center, placed inside the real projected Mexico territory.
   const MEXICO_CROSSINGS = [
-    { region: "Mexico-California", name: "Otay Mesa",       marker: { x:  82, y: 365 }, card: { x: 110, y: 470 } },
-    { region: "Mexico-Arizona",    name: "Nogales",         marker: { x: 218, y: 415 }, card: { x: 235, y: 530 } },
-    { region: "Mexico-New Mexico", name: "Santa Teresa",    marker: { x: 320, y: 442 }, card: { x: 355, y: 575 } },
-    { region: "Mexico-Texas",      name: "Laredo / Pharr",  marker: { x: 480, y: 555 }, card: { x: 510, y: 685 } },
+    { region: "Mexico-California", name: "Otay Mesa",       marker: { x: 101, y: 402 }, card: { x: 130, y: 500 } },
+    { region: "Mexico-Arizona",    name: "Nogales",         marker: { x: 211, y: 451 }, card: { x: 220, y: 560 } },
+    { region: "Mexico-New Mexico", name: "Santa Teresa",    marker: { x: 285, y: 450 }, card: { x: 320, y: 600 } },
+    { region: "Mexico-Texas",      name: "Laredo / Pharr",  marker: { x: 440, y: 574 }, card: { x: 470, y: 700 } },
   ];
 
   // ═══════════════════════════════════════════════════════════════
@@ -776,7 +777,7 @@
       // Label position: roughly central Mexico (Mexico City area), well inside the shape.
       mexicoG.innerHTML =
         `<path class="mexico-shape" d="${d}" />
-         <text class="mexico-label" x="455" y="800" text-anchor="middle">MEXICO</text>`;
+         <text class="mexico-label" x="430" y="740" text-anchor="middle">MEXICO</text>`;
     } else {
       mexicoG.innerHTML = "";
     }
