@@ -479,7 +479,7 @@
   <div class="viz-area">
     <div class="viz-pane" id="mapPane">
       <div class="map-container">
-        <svg class="us-map" viewBox="0 0 975 830" preserveAspectRatio="xMidYMid meet">
+        <svg class="us-map" viewBox="0 0 975 970" preserveAspectRatio="xMidYMid meet">
           <g id="mexicoShapeG"></g>
           <g id="statesG"></g>
           <path class="nation" id="nationPath"></path>
@@ -565,33 +565,13 @@
   ];
 
   // US-MX border crossings. Marker x/y = approximate Albers location on the southern border.
-  // Card x/y = where the floating label card sits inside Mexico territory.
+  // Card x/y = label-card center, placed inside the real projected Mexico territory.
   const MEXICO_CROSSINGS = [
-    { region: "Mexico-California", name: "Otay Mesa",       marker: { x:  82, y: 365 }, card: { x:  60, y: 640 } },
-    { region: "Mexico-Arizona",    name: "Nogales",         marker: { x: 218, y: 415 }, card: { x: 200, y: 700 } },
-    { region: "Mexico-New Mexico", name: "Santa Teresa",    marker: { x: 320, y: 442 }, card: { x: 340, y: 730 } },
-    { region: "Mexico-Texas",      name: "Laredo / Pharr",  marker: { x: 480, y: 555 }, card: { x: 490, y: 760 } },
+    { region: "Mexico-California", name: "Otay Mesa",       marker: { x:  82, y: 365 }, card: { x: 110, y: 470 } },
+    { region: "Mexico-Arizona",    name: "Nogales",         marker: { x: 218, y: 415 }, card: { x: 235, y: 530 } },
+    { region: "Mexico-New Mexico", name: "Santa Teresa",    marker: { x: 320, y: 442 }, card: { x: 355, y: 575 } },
+    { region: "Mexico-Texas",      name: "Laredo / Pharr",  marker: { x: 480, y: 555 }, card: { x: 510, y: 685 } },
   ];
-
-  // Stylized Mexico polygon. Top edge roughly traces under the US southern border;
-  // bottom narrows toward the Yucatan. Drawn behind the US states with dashed border.
-  const MEXICO_PATH =
-    "M 60 410 " +
-    "L 200 440 " +
-    "L 320 470 " +
-    "L 460 545 " +
-    "L 540 580 " +
-    "L 640 615 " +
-    "L 720 660 " +
-    "L 750 720 " +
-    "L 720 790 " +
-    "L 600 810 " +
-    "L 460 800 " +
-    "L 330 780 " +
-    "L 220 740 " +
-    "L 140 680 " +
-    "L 90 600 " +
-    "L 65 510 Z";
 
   // ═══════════════════════════════════════════════════════════════
   // STATE
@@ -760,19 +740,46 @@
   // MAP — D3 + TopoJSON, AK/HI removed, Mexico shape behind US
   // ═══════════════════════════════════════════════════════════════
   async function loadTopology() {
-    const res = await fetch("https://cdn.jsdelivr.net/npm/us-atlas@3/states-albers-10m.json");
-    topology = await res.json();
+    const [usRes, worldRes] = await Promise.all([
+      fetch("https://cdn.jsdelivr.net/npm/us-atlas@3/states-albers-10m.json"),
+      fetch("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json"),
+    ]);
+    topology = await usRes.json();
+    const worldTopo = await worldRes.json();
+
     // Filter out Alaska (FIPS 02) and Hawaii (FIPS 15)
     const contiguousGeoms = topology.objects.states.geometries
       .filter(g => g.id !== "02" && g.id !== "15");
     statePaths = contiguousGeoms.map(g => topojson.feature(topology, g));
     contiguousNationFeature = topojson.merge(topology, contiguousGeoms);
+
     const path = d3.geoPath();
     document.getElementById("nationPath").setAttribute("d", path(contiguousNationFeature));
-    // Mexico backdrop shape
-    document.getElementById("mexicoShapeG").innerHTML =
-      `<path class="mexico-shape" d="${MEXICO_PATH}" />
-       <text class="mexico-label" x="400" y="700" text-anchor="middle">MEXICO</text>`;
+
+    // Project Mexico (lat/long) through an Albers matched to us-atlas:
+    // us-atlas states-albers-10m.json is rendered via geoAlbersUsa with scale=1300, translate=[487.5, 305].
+    // The lower-48 sub-projection of geoAlbersUsa is geoAlbers() with default rotate/center/parallels,
+    // so we use geoAlbers() with the same scale & translate to align with the US shapes.
+    const albers = d3.geoAlbers()
+      .scale(1300)
+      .translate([487.5, 305]);
+    const albersPath = d3.geoPath(albers);
+
+    const countries = topojson.feature(worldTopo, worldTopo.objects.countries).features;
+    const mexicoFeature = countries.find(
+      f => f.id === "484" || f.id === 484 || (f.properties && f.properties.name === "Mexico")
+    );
+
+    const mexicoG = document.getElementById("mexicoShapeG");
+    if (mexicoFeature) {
+      const d = albersPath(mexicoFeature);
+      // Label position: roughly central Mexico (Mexico City area), well inside the shape.
+      mexicoG.innerHTML =
+        `<path class="mexico-shape" d="${d}" />
+         <text class="mexico-label" x="455" y="800" text-anchor="middle">MEXICO</text>`;
+    } else {
+      mexicoG.innerHTML = "";
+    }
   }
 
   function appendLabelBox(parent, x, y, text, leader) {
