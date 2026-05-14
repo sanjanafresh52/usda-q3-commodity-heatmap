@@ -387,12 +387,18 @@
     text-anchor: middle;
   }
 
-  /* viz layout: map/chart on left, vertical legend on right */
+  /* viz layout: map/chart on left, vertical legend on right (map view only) */
   .viz-layout {
     display: grid;
     grid-template-columns: minmax(0, 4fr) minmax(150px, 1fr);
     gap: 24px;
     align-items: stretch;
+  }
+  .viz-layout.chart-active {
+    grid-template-columns: 1fr;
+  }
+  .viz-layout.chart-active .legend-vertical {
+    display: none;
   }
   @media (max-width: 720px) {
     .viz-layout {
@@ -765,16 +771,19 @@
         currentView = b.dataset.view;
         const mapPane = document.getElementById("mapPane");
         const chartPane = document.getElementById("chartPane");
+        const vizLayout = document.querySelector(".viz-layout");
         if (currentView === "map") {
           chartPane.classList.add("hidden");
           chartPane.setAttribute("aria-hidden", "true");
           mapPane.classList.remove("hidden");
           mapPane.setAttribute("aria-hidden", "false");
+          vizLayout.classList.remove("chart-active");
         } else {
           mapPane.classList.add("hidden");
           mapPane.setAttribute("aria-hidden", "true");
           chartPane.classList.remove("hidden");
           chartPane.setAttribute("aria-hidden", "false");
+          vizLayout.classList.add("chart-active");
         }
       });
     });
