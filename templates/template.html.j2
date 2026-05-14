@@ -965,20 +965,21 @@
     const svg = d3.select("#chartSvg");
     svg.selectAll("*").remove();
 
-    const W = 960, marginL = 150, marginR = 110, marginT = 16, marginB = 16;
+    const W = 960, H = 970, marginL = 150, marginR = 110, marginT = 16, marginB = 16;
     const rows = REGIONS
       .map(r => ({ region: r, value: regionValues[r] || 0 }))
       .sort((a, b) => b.value - a.value);
 
+    svg.attr("viewBox", `0 0 ${W} ${H}`);
+
     if (rows.length === 0 || maxVal <= 0) {
-      svg.attr("viewBox", `0 0 ${W} 200`);
-      svg.append("text").attr("class", "chart-empty").attr("x", W/2).attr("y", 100).text("No data for current selection");
+      svg.append("text").attr("class", "chart-empty").attr("x", W/2).attr("y", H/2).text("No data for current selection");
       return;
     }
 
-    const rowH = 30, gap = 6;
-    const H = marginT + rows.length * (rowH + gap) - gap + marginB;
-    svg.attr("viewBox", `0 0 ${W} ${H}`);
+    const gap = 6;
+    const usableH = H - marginT - marginB;
+    const rowH = (usableH - (rows.length - 1) * gap) / rows.length;
     const barMaxW = W - marginL - marginR;
 
     rows.forEach((row, i) => {
