@@ -224,7 +224,12 @@
   }
 
   /* map */
-  .map-container { position: relative; width: 100%; }
+  .map-container {
+    position: relative;
+    width: 100%;
+    max-width: 80%;
+    margin: 0 auto;
+  }
   .us-map { width: 100%; height: auto; display: block; }
   .us-map path.state {
     stroke: #ffffff;
@@ -351,7 +356,13 @@
   .tooltip .tt-detail { font-size: 11px; color: #b7d394; }
 
   /* chart view */
-  .chart-svg { width: 100%; height: auto; display: block; }
+  .chart-svg {
+    width: 100%;
+    max-width: 80%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
   .chart-row-label {
     font-family: 'Open Sans', sans-serif;
     font-size: 12px;
@@ -600,10 +611,10 @@
   // (computed via d3.geoAlbers().scale(1300).translate([487.5, 305]) so they sit on the border).
   // Card x/y = label-card center, placed inside the real projected Mexico territory.
   const MEXICO_CROSSINGS = [
-    { region: "Mexico-California", name: "Otay Mesa",       marker: { x: 101, y: 402 }, card: { x:  88, y: 451 } },
-    { region: "Mexico-Arizona",    name: "Nogales",         marker: { x: 211, y: 451 }, card: { x: 188, y: 506 } },
-    { region: "Mexico-New Mexico", name: "Santa Teresa",    marker: { x: 285, y: 450 }, card: { x: 275, y: 525 } },
-    { region: "Mexico-Texas",      name: "Laredo / Pharr",  marker: { x: 440, y: 574 }, card: { x: 428, y: 637 } },
+    { region: "Mexico-California", name: "Otay Mesa",       marker: { x: 101, y: 402 }, card: { x:  95, y: 427 } },
+    { region: "Mexico-Arizona",    name: "Nogales",         marker: { x: 211, y: 451 }, card: { x: 200, y: 479 } },
+    { region: "Mexico-New Mexico", name: "Santa Teresa",    marker: { x: 285, y: 450 }, card: { x: 280, y: 488 } },
+    { region: "Mexico-Texas",      name: "Laredo / Pharr",  marker: { x: 440, y: 574 }, card: { x: 434, y: 606 } },
   ];
 
   // ═══════════════════════════════════════════════════════════════
