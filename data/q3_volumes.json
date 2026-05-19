@@ -9,49 +9,49 @@
     ],
     "n_years_avg": 4,
     "metric": "Refrigerated truck volume, Q3 (Jul-Sep) average, in millions of pounds",
-    "fetched_at": "2026-05-19T20:40:59.027652"
+    "fetched_at": "2026-05-19T20:49:14.322698"
   },
   "production": {
     "All Commodities": {
       "Mexico-California": {
-        "jul": 184.07,
-        "aug": 162.1,
-        "sep": 133.87
+        "jul": 321.26,
+        "aug": 281.68,
+        "sep": 248.11
       },
       "Mexico-Texas": {
-        "jul": 658.84,
-        "aug": 653.83,
-        "sep": 615.92
+        "jul": 923.45,
+        "aug": 909.42,
+        "sep": 857.35
       },
       "Mexico-Arizona": {
-        "jul": 175.61,
-        "aug": 96.39,
-        "sep": 86.67
+        "jul": 204.06,
+        "aug": 118.71,
+        "sep": 107.06
       },
       "Arizona": {
-        "jul": 165.23,
+        "jul": 168.74,
         "aug": 25.4,
         "sep": 7.86
       },
       "Florida": {
-        "jul": 27.43,
-        "aug": 6.05,
-        "sep": 5.63
+        "jul": 31.04,
+        "aug": 7.17,
+        "sep": 7.48
       },
       "Southeast": {
-        "jul": 420.39,
-        "aug": 135.78,
-        "sep": 32.45
+        "jul": 481.24,
+        "aug": 170.37,
+        "sep": 56.69
       },
       "California": {
-        "jul": 1645.7,
-        "aug": 1826.52,
-        "sep": 1543.19
+        "jul": 1960.76,
+        "aug": 2166.29,
+        "sep": 1806.04
       },
       "Great Lakes": {
-        "jul": 202.06,
-        "aug": 423.64,
-        "sep": 295.78
+        "jul": 227.32,
+        "aug": 448.98,
+        "sep": 307.61
       },
       "Texas": {
         "jul": 103.96,
@@ -59,14 +59,14 @@
         "sep": 55.66
       },
       "Mexico-New Mexico": {
-        "jul": 34.48,
-        "aug": 10.76,
-        "sep": 3.08
+        "jul": 52.06,
+        "aug": 46.6,
+        "sep": 45.91
       },
       "Mid-Atlantic": {
-        "jul": 93.46,
-        "aug": 159.38,
-        "sep": 75.79
+        "jul": 97.4,
+        "aug": 164.74,
+        "sep": 78.05
       },
       "Colorado": {
         "jul": 100.98,
@@ -74,14 +74,14 @@
         "sep": 130.66
       },
       "PNW": {
-        "jul": 594.74,
-        "aug": 794.98,
-        "sep": 910.0
+        "jul": 781.82,
+        "aug": 875.43,
+        "sep": 967.52
       },
       "New York": {
-        "jul": 16.54,
-        "aug": 28.9,
-        "sep": 43.59
+        "jul": 28.31,
+        "aug": 64.03,
+        "sep": 82.37
       }
     },
     "Watermelons": {
@@ -738,6 +738,731 @@
         "aug": 0.19,
         "sep": 0.0
       }
+    },
+    "Broccoli": {
+      "Mexico-California": {
+        "jul": 1.19,
+        "aug": 1.59,
+        "sep": 1.65
+      },
+      "Mexico-Texas": {
+        "jul": 23.37,
+        "aug": 21.57,
+        "sep": 22.9
+      },
+      "Mexico-Arizona": {
+        "jul": 0.69,
+        "aug": 0.72,
+        "sep": 0.64
+      },
+      "California": {
+        "jul": 42.91,
+        "aug": 42.08,
+        "sep": 36.99
+      }
+    },
+    "Peaches": {
+      "California": {
+        "jul": 46.88,
+        "aug": 57.76,
+        "sep": 37.39
+      },
+      "Southeast": {
+        "jul": 17.35,
+        "aug": 7.57,
+        "sep": 0.0
+      },
+      "Mid-Atlantic": {
+        "jul": 1.39,
+        "aug": 2.98,
+        "sep": 0.24
+      },
+      "PNW": {
+        "jul": 0.76,
+        "aug": 6.73,
+        "sep": 5.16
+      }
+    },
+    "Cherries": {
+      "PNW": {
+        "jul": 140.86,
+        "aug": 36.38,
+        "sep": 0.88
+      },
+      "California": {
+        "jul": 0.21,
+        "aug": 0.0,
+        "sep": 0.0
+      }
+    },
+    "Cabbage": {
+      "Mexico-Texas": {
+        "jul": 8.49,
+        "aug": 7.32,
+        "sep": 7.81
+      },
+      "Mexico-California": {
+        "jul": 0.11,
+        "aug": 0.05,
+        "sep": 0.15
+      },
+      "Mexico-Arizona": {
+        "jul": 2.29,
+        "aug": 2.13,
+        "sep": 1.93
+      },
+      "California": {
+        "jul": 11.44,
+        "aug": 10.56,
+        "sep": 9.88
+      },
+      "Southeast": {
+        "jul": 3.81,
+        "aug": 0.5,
+        "sep": 0.48
+      },
+      "Great Lakes": {
+        "jul": 10.71,
+        "aug": 8.43,
+        "sep": 6.78
+      },
+      "New York": {
+        "jul": 8.09,
+        "aug": 22.73,
+        "sep": 26.57
+      }
+    },
+    "Peppers, Jalapeno": {
+      "Mexico-Arizona": {
+        "jul": 3.72,
+        "aug": 1.07,
+        "sep": 0.55
+      },
+      "Southeast": {
+        "jul": 0.33,
+        "aug": 0.36,
+        "sep": 0.04
+      },
+      "Mexico-Texas": {
+        "jul": 14.77,
+        "aug": 13.62,
+        "sep": 11.77
+      },
+      "Mexico-New Mexico": {
+        "jul": 9.67,
+        "aug": 20.76,
+        "sep": 19.08
+      },
+      "Mexico-California": {
+        "jul": 12.11,
+        "aug": 10.59,
+        "sep": 10.27
+      }
+    },
+    "Pears": {
+      "PNW": {
+        "jul": 14.13,
+        "aug": 10.07,
+        "sep": 44.04
+      },
+      "California": {
+        "jul": 8.09,
+        "aug": 28.49,
+        "sep": 21.79
+      }
+    },
+    "Papaya": {
+      "Mexico-California": {
+        "jul": 14.15,
+        "aug": 13.52,
+        "sep": 13.63
+      },
+      "Mexico-Texas": {
+        "jul": 26.32,
+        "aug": 26.84,
+        "sep": 25.4
+      },
+      "Mexico-Arizona": {
+        "jul": 0.0,
+        "aug": 0.0,
+        "sep": 0.04
+      }
+    },
+    "Cauliflower": {
+      "Mexico-California": {
+        "jul": 0.5,
+        "aug": 0.67,
+        "sep": 0.58
+      },
+      "Mexico-Texas": {
+        "jul": 4.46,
+        "aug": 5.51,
+        "sep": 6.58
+      },
+      "California": {
+        "jul": 34.42,
+        "aug": 34.12,
+        "sep": 30.42
+      },
+      "Mexico-Arizona": {
+        "jul": 0.24,
+        "aug": 0.23,
+        "sep": 0.21
+      }
+    },
+    "Peppers, Other": {
+      "Mexico-California": {
+        "jul": 8.17,
+        "aug": 6.75,
+        "sep": 5.52
+      },
+      "Mexico-Arizona": {
+        "jul": 1.58,
+        "aug": 0.97,
+        "sep": 0.68
+      },
+      "Mexico-Texas": {
+        "jul": 15.95,
+        "aug": 13.62,
+        "sep": 12.11
+      },
+      "Mexico-New Mexico": {
+        "jul": 4.01,
+        "aug": 13.23,
+        "sep": 23.46
+      },
+      "Southeast": {
+        "jul": 0.0,
+        "aug": 0.0,
+        "sep": 0.02
+      }
+    },
+    "Onions, Green": {
+      "Mexico-California": {
+        "jul": 31.59,
+        "aug": 25.0,
+        "sep": 21.62
+      },
+      "Mexico-Arizona": {
+        "jul": 1.08,
+        "aug": 0.74,
+        "sep": 0.58
+      },
+      "Mexico-Texas": {
+        "jul": 5.44,
+        "aug": 5.13,
+        "sep": 4.73
+      },
+      "Mexico-New Mexico": {
+        "jul": 2.82,
+        "aug": 1.57,
+        "sep": 0.01
+      },
+      "Southeast": {
+        "jul": 1.51,
+        "aug": 1.23,
+        "sep": 1.47
+      },
+      "California": {
+        "jul": 0.27,
+        "aug": 0.31,
+        "sep": 0.2
+      }
+    },
+    "Nectarines": {
+      "California": {
+        "jul": 42.94,
+        "aug": 41.6,
+        "sep": 16.38
+      },
+      "Mid-Atlantic": {
+        "jul": 0.16,
+        "aug": 0.1,
+        "sep": 0.02
+      },
+      "PNW": {
+        "jul": 0.0,
+        "aug": 0.07,
+        "sep": 0.12
+      }
+    },
+    "Blueberries": {
+      "Mexico-Texas": {
+        "jul": 0.67,
+        "aug": 0.2,
+        "sep": 0.73
+      },
+      "Mexico-California": {
+        "jul": 1.07,
+        "aug": 0.03,
+        "sep": 0.33
+      },
+      "California": {
+        "jul": 1.05,
+        "aug": 0.07,
+        "sep": 0.39
+      },
+      "Southeast": {
+        "jul": 0.91,
+        "aug": 0.0,
+        "sep": 0.0
+      },
+      "PNW": {
+        "jul": 31.27,
+        "aug": 27.2,
+        "sep": 6.53
+      },
+      "Great Lakes": {
+        "jul": 12.86,
+        "aug": 12.08,
+        "sep": 2.8
+      },
+      "Mexico-Arizona": {
+        "jul": 0.0,
+        "aug": 0.01,
+        "sep": 0.0
+      },
+      "Florida": {
+        "jul": 0.0,
+        "aug": 0.0,
+        "sep": 0.0
+      }
+    },
+    "Tomatoes, Grape Type": {
+      "Florida": {
+        "jul": 0.73,
+        "aug": 0.0,
+        "sep": 0.69
+      },
+      "Mexico-Texas": {
+        "jul": 16.51,
+        "aug": 18.76,
+        "sep": 21.88
+      },
+      "Mexico-Arizona": {
+        "jul": 5.24,
+        "aug": 6.34,
+        "sep": 6.26
+      },
+      "Mexico-California": {
+        "jul": 6.67,
+        "aug": 3.69,
+        "sep": 3.54
+      },
+      "Mid-Atlantic": {
+        "jul": 2.39,
+        "aug": 2.28,
+        "sep": 2.0
+      },
+      "Southeast": {
+        "jul": 0.08,
+        "aug": 0.18,
+        "sep": 0.14
+      },
+      "Great Lakes": {
+        "jul": 0.03,
+        "aug": 0.24,
+        "sep": 0.29
+      },
+      "Mexico-New Mexico": {
+        "jul": 0.17,
+        "aug": 0.03,
+        "sep": 0.0
+      }
+    },
+    "Tomatillos": {
+      "Mexico-Arizona": {
+        "jul": 0.38,
+        "aug": 0.03,
+        "sep": 0.09
+      },
+      "Mexico-New Mexico": {
+        "jul": 0.79,
+        "aug": 0.16,
+        "sep": 0.15
+      },
+      "Mexico-California": {
+        "jul": 15.44,
+        "aug": 14.3,
+        "sep": 13.81
+      },
+      "Mexico-Texas": {
+        "jul": 16.72,
+        "aug": 17.33,
+        "sep": 16.28
+      }
+    },
+    "Corn, Sweet": {
+      "Mexico-Texas": {
+        "jul": 4.08,
+        "aug": 4.75,
+        "sep": 3.86
+      },
+      "Mexico-California": {
+        "jul": 1.66,
+        "aug": 1.66,
+        "sep": 1.67
+      },
+      "California": {
+        "jul": 16.86,
+        "aug": 10.01,
+        "sep": 8.99
+      },
+      "Southeast": {
+        "jul": 10.37,
+        "aug": 0.2,
+        "sep": 0.35
+      },
+      "Mexico-Arizona": {
+        "jul": 0.22,
+        "aug": 0.16,
+        "sep": 0.18
+      },
+      "Great Lakes": {
+        "jul": 1.02,
+        "aug": 4.59,
+        "sep": 1.96
+      },
+      "New York": {
+        "jul": 1.66,
+        "aug": 7.19,
+        "sep": 8.34
+      },
+      "Florida": {
+        "jul": 1.61,
+        "aug": 0.0,
+        "sep": 0.0
+      },
+      "Arizona": {
+        "jul": 3.51,
+        "aug": 0.0,
+        "sep": 0.0
+      },
+      "Mexico-New Mexico": {
+        "jul": 0.04,
+        "aug": 0.0,
+        "sep": 0.0
+      }
+    },
+    "Bananas": {
+      "Mexico-California": {
+        "jul": 4.73,
+        "aug": 4.72,
+        "sep": 4.3
+      },
+      "Mexico-Texas": {
+        "jul": 24.05,
+        "aug": 23.5,
+        "sep": 22.32
+      },
+      "Mexico-Arizona": {
+        "jul": 2.96,
+        "aug": 2.64,
+        "sep": 2.5
+      },
+      "Mexico-New Mexico": {
+        "jul": 0.05,
+        "aug": 0.06,
+        "sep": 0.08
+      }
+    },
+    "Raspberries": {
+      "Mexico-Texas": {
+        "jul": 3.28,
+        "aug": 3.0,
+        "sep": 7.66
+      },
+      "Mexico-California": {
+        "jul": 6.39,
+        "aug": 10.43,
+        "sep": 9.43
+      },
+      "California": {
+        "jul": 18.87,
+        "aug": 14.45,
+        "sep": 12.95
+      },
+      "Mexico-Arizona": {
+        "jul": 0.03,
+        "aug": 0.0,
+        "sep": 0.0
+      },
+      "Mexico-New Mexico": {
+        "jul": 0.0,
+        "aug": 0.0,
+        "sep": 0.0
+      }
+    },
+    "Sweet Potatoes": {
+      "Southeast": {
+        "jul": 24.29,
+        "aug": 23.83,
+        "sep": 21.44
+      },
+      "California": {
+        "jul": 5.01,
+        "aug": 4.48,
+        "sep": 4.19
+      }
+    },
+    "Carrots": {
+      "Mexico-Texas": {
+        "jul": 29.43,
+        "aug": 27.38,
+        "sep": 16.34
+      },
+      "Mexico-California": {
+        "jul": 1.41,
+        "aug": 1.81,
+        "sep": 1.82
+      },
+      "Mexico-Arizona": {
+        "jul": 1.0,
+        "aug": 0.36,
+        "sep": 0.29
+      },
+      "California": {
+        "jul": 0.24,
+        "aug": 0.18,
+        "sep": 0.09
+      },
+      "Mexico-New Mexico": {
+        "jul": 0.0,
+        "aug": 0.0,
+        "sep": 0.01
+      }
+    },
+    "Grapefruit": {
+      "Mexico-Texas": {
+        "jul": 0.09,
+        "aug": 0.12,
+        "sep": 0.03
+      },
+      "California": {
+        "jul": 26.46,
+        "aug": 26.46,
+        "sep": 26.46
+      }
+    },
+    "Lettuce, Other": {
+      "Mexico-California": {
+        "jul": 1.59,
+        "aug": 1.88,
+        "sep": 1.92
+      },
+      "Mexico-Texas": {
+        "jul": 20.69,
+        "aug": 20.95,
+        "sep": 21.93
+      },
+      "Mexico-Arizona": {
+        "jul": 3.55,
+        "aug": 2.81,
+        "sep": 2.49
+      },
+      "California": {
+        "jul": 0.18,
+        "aug": 0.46,
+        "sep": 0.0
+      }
+    },
+    "Cilantro": {
+      "Mexico-California": {
+        "jul": 0.47,
+        "aug": 0.41,
+        "sep": 0.39
+      },
+      "Mexico-Texas": {
+        "jul": 13.52,
+        "aug": 15.06,
+        "sep": 13.69
+      },
+      "Mexico-Arizona": {
+        "jul": 0.02,
+        "aug": 0.08,
+        "sep": 0.0
+      },
+      "California": {
+        "jul": 9.02,
+        "aug": 9.28,
+        "sep": 9.02
+      },
+      "Mexico-New Mexico": {
+        "jul": 0.0,
+        "aug": 0.0,
+        "sep": 0.0
+      }
+    },
+    "Asparagus": {
+      "Mexico-California": {
+        "jul": 15.59,
+        "aug": 12.97,
+        "sep": 15.26
+      },
+      "Mexico-Texas": {
+        "jul": 7.05,
+        "aug": 5.31,
+        "sep": 1.69
+      },
+      "Mexico-Arizona": {
+        "jul": 0.93,
+        "aug": 1.01,
+        "sep": 0.63
+      },
+      "Great Lakes": {
+        "jul": 0.64,
+        "aug": 0.0,
+        "sep": 0.0
+      },
+      "PNW": {
+        "jul": 0.06,
+        "aug": 0.0,
+        "sep": 0.0
+      }
+    },
+    "Blackberries": {
+      "Mexico-Texas": {
+        "jul": 0.91,
+        "aug": 1.16,
+        "sep": 3.83
+      },
+      "Mexico-California": {
+        "jul": 0.26,
+        "aug": 0.14,
+        "sep": 0.32
+      },
+      "Southeast": {
+        "jul": 2.01,
+        "aug": 0.48,
+        "sep": 0.14
+      },
+      "California": {
+        "jul": 12.65,
+        "aug": 16.96,
+        "sep": 13.9
+      },
+      "Mexico-Arizona": {
+        "jul": 0.06,
+        "aug": 0.0,
+        "sep": 0.0
+      },
+      "Mexico-New Mexico": {
+        "jul": 0.0,
+        "aug": 0.0,
+        "sep": 0.0
+      }
+    },
+    "Plums": {
+      "California": {
+        "jul": 17.14,
+        "aug": 19.12,
+        "sep": 12.35
+      },
+      "Mexico-California": {
+        "jul": 0.0,
+        "aug": 0.0,
+        "sep": 0.0
+      },
+      "PNW": {
+        "jul": 0.0,
+        "aug": 0.0,
+        "sep": 0.79
+      },
+      "Mexico-Texas": {
+        "jul": 0.0,
+        "aug": 0.0,
+        "sep": 0.04
+      }
+    },
+    "Brussels Sprouts": {
+      "Mexico-California": {
+        "jul": 6.38,
+        "aug": 2.37,
+        "sep": 1.75
+      },
+      "Mexico-Texas": {
+        "jul": 0.38,
+        "aug": 0.17,
+        "sep": 0.07
+      },
+      "Mexico-Arizona": {
+        "jul": 0.95,
+        "aug": 0.24,
+        "sep": 0.21
+      },
+      "California": {
+        "jul": 9.82,
+        "aug": 12.19,
+        "sep": 11.39
+      }
+    },
+    "Okra": {
+      "Mexico-Texas": {
+        "jul": 17.75,
+        "aug": 13.16,
+        "sep": 9.07
+      },
+      "Florida": {
+        "jul": 1.27,
+        "aug": 1.12,
+        "sep": 1.16
+      }
+    },
+    "Beans": {
+      "Mexico-Arizona": {
+        "jul": 2.41,
+        "aug": 2.21,
+        "sep": 2.34
+      },
+      "Mexico-California": {
+        "jul": 6.24,
+        "aug": 5.31,
+        "sep": 4.18
+      },
+      "Mexico-Texas": {
+        "jul": 3.34,
+        "aug": 2.99,
+        "sep": 2.29
+      },
+      "New York": {
+        "jul": 2.02,
+        "aug": 5.21,
+        "sep": 3.87
+      },
+      "Southeast": {
+        "jul": 0.19,
+        "aug": 0.24,
+        "sep": 0.16
+      }
+    },
+    "Lettuce, Green Leaf": {
+      "California": {
+        "jul": 10.6,
+        "aug": 11.19,
+        "sep": 10.07
+      }
+    },
+    "Vegetables Other": {
+      "Mexico-Texas": {
+        "jul": 7.34,
+        "aug": 8.14,
+        "sep": 8.42
+      },
+      "Mexico-California": {
+        "jul": 1.47,
+        "aug": 1.69,
+        "sep": 2.1
+      },
+      "Mexico-Arizona": {
+        "jul": 1.1,
+        "aug": 0.57,
+        "sep": 0.77
+      },
+      "Mexico-New Mexico": {
+        "jul": 0.03,
+        "aug": 0.03,
+        "sep": 0.04
+      }
     }
   },
   "commodities": [
@@ -761,7 +1486,37 @@
     "Celery",
     "Peppers, Bell Type",
     "Lemons",
-    "Honeydews"
+    "Honeydews",
+    "Broccoli",
+    "Peaches",
+    "Cherries",
+    "Cabbage",
+    "Peppers, Jalapeno",
+    "Pears",
+    "Papaya",
+    "Cauliflower",
+    "Peppers, Other",
+    "Onions, Green",
+    "Nectarines",
+    "Blueberries",
+    "Tomatoes, Grape Type",
+    "Tomatillos",
+    "Corn, Sweet",
+    "Bananas",
+    "Raspberries",
+    "Sweet Potatoes",
+    "Carrots",
+    "Grapefruit",
+    "Lettuce, Other",
+    "Cilantro",
+    "Asparagus",
+    "Blackberries",
+    "Plums",
+    "Brussels Sprouts",
+    "Okra",
+    "Beans",
+    "Lettuce, Green Leaf",
+    "Vegetables Other"
   ],
   "regions": [
     "Arizona",
