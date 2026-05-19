@@ -266,13 +266,16 @@ def aggregate(records: list[dict[str, Any]]) -> dict[str, Any]:
                 "sep": round(month_totals[9] / n / 1_000_000, 2),
             }
 
-    # Keep only the top 20 commodities by Q3 total volume (dashboard readability)
+    # Keep the top 50 commodities by Q3 total volume — covers everything above
+    # ~90M lbs Q3 (Broccoli, Cherries, Peaches, Blueberries, Cauliflower, Sweet
+    # Corn, Sweet Potatoes, etc.) and stops before the "Vegetables Other" /
+    # "Fruits Other" catch-all rows.
     commodity_totals = [
         (c, sum(months["jul"] + months["aug"] + months["sep"] for months in regions.values()))
         for c, regions in production.items()
     ]
     commodity_totals.sort(key=lambda x: x[1], reverse=True)
-    top_commodities = [c for c, _ in commodity_totals[:20]]
+    top_commodities = [c for c, _ in commodity_totals[:50]]
     production = {c: production[c] for c in top_commodities}
 
     # "All Commodities" rollup
