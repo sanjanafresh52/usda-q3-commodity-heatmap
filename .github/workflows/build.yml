@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -31,6 +31,18 @@ jobs:
         env:
           SOCRATA_APP_TOKEN: ${{ secrets.SOCRATA_APP_TOKEN }}
         run: python scripts/fetch_data.py
+
+      - name: Commit refreshed q3_volumes.json
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/q3_volumes.json
+          if git diff --cached --quiet; then
+            echo "No changes in q3_volumes.json"
+          else
+            git commit -m "Refresh q3_volumes.json from Socrata [skip ci]"
+            git push origin HEAD:${{ github.ref_name }}
+          fi
 
       - name: Build dashboard HTML
         run: python scripts/build_dashboard.py
